@@ -1,0 +1,153 @@
+name: ci
+
+on:
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Sanity imports
+        run: |
+          python - <<'PY'
+          import importlib
+          modules = ['streamlit','pandas','numpy','plotly','sklearn']
+          for m in modules:
+              importlib.import_module(m)
+          import src.config, src.data_access, src.metrics, src.ml
+          print('Imports OK')
+          PY
+name: ci
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Sanity imports
+        run: |
+          python - <<'PY'
+          import importlib
+          modules = ['streamlit','pandas','numpy','plotly','sklearn']
+          for m in modules:
+              importlib.import_module(m)
+          import src.config, src.data_access, src.metrics, src.ml
+          print('Imports OK')
+          PY
+name: ci
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Sanity imports
+        run: |
+          python - <<'PY'
+          import importlib
+          modules = ['streamlit','pandas','numpy','plotly','sklearn']
+          for m in modules:
+              importlib.import_module(m)
+          import src.config, src.data_access, src.metrics, src.ml
+          print('Imports OK')
+          PY
+name: ci
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Sanity imports
+        run: |
+          python - <<'PY'
+          import importlib
+          modules = ['streamlit','pandas','numpy','plotly','sklearn']
+          for m in modules:
+              importlib.import_module(m)
+          import src.config, src.data_access, src.metrics, src.ml
+          print('Imports OK')
+          PY
+name: ci
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Sanity imports
+        run: |
+          python - <<'PY'
+          import importlib
+          modules = ['streamlit','pandas','numpy','plotly','sklearn']
+          for m in modules:
+              importlib.import_module(m)
+          import src.config, src.data_access, src.metrics, src.ml
+          print('Imports OK')
+          PY
+
+
+
+# nudge run
