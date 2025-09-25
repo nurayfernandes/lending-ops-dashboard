@@ -11,9 +11,30 @@ from src.metrics import compute_operational_kpis, compute_product_kpis
 from src.ml import forecast_series_stub, score_conversion_propensity_stub
 from src.filters import apply_filters, build_filter_options
 from src.ui_components import kpi_row
+from src.validation import run_consistency_checks
 
 
 st.set_page_config(page_title="Lending Ops & Product Dashboard", layout="wide")
+
+# Simple password gate via Streamlit secrets
+def _auth_gate():
+    auth_enabled = False
+    try:
+        auth_enabled = bool(st.secrets.get("AUTH_ENABLED", False))  # type: ignore[attr-defined]
+    except Exception:
+        auth_enabled = False
+    if not auth_enabled:
+        return True
+    password = st.secrets.get("AUTH_PASSWORD") if hasattr(st, "secrets") else None  # type: ignore[attr-defined]
+    if not password:
+        st.error("Autenticação habilitada, mas senha não configurada em st.secrets.")
+        return False
+    with st.sidebar:
+        user_pw = st.text_input("Senha", type="password")
+        if user_pw != password:
+            st.warning("Informe a senha correta para acessar.")
+            return False
+    return True
 
 
 @st.cache_data(show_spinner=False)
@@ -56,6 +77,8 @@ def _sidebar_filters(ds: DataSource):
 
 def main():
     st.title("Lending – Operação, Produto e Previsões")
+    if not _auth_gate():
+        st.stop()
     ds = _load_data_cached()
     filters = _sidebar_filters(ds)
 
@@ -153,8 +176,8 @@ def main():
         if is_databricks_configured(cfg):
             st.success("Databricks (SQL Warehouse)")
             st.code({
-                "host": cfg.host,
-                "http_path": cfg.http_path,
+                "host": "***",  # masked
+                "http_path": "***",  # masked
                 "tables": {
                     "tickets": cfg.table_tickets,
                     "jobs": cfg.table_jobs,
@@ -164,6 +187,15 @@ def main():
             })
         else:
             st.warning("Usando dados mockados (sem credenciais do Databricks)")
+
+        # Data quality checks
+        st.subheader("Validações de dados")
+        issues = run_consistency_checks(tickets_f, product_f)
+        if issues:
+            for msg in issues:
+                st.error(msg)
+        else:
+            st.success("Sem problemas de consistência detectados.")
 
 
 if __name__ == "__main__":
