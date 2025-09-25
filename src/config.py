@@ -27,6 +27,19 @@ def _get_secret(key: str, default: str | None = None) -> str | None:
                 return str(value)
         except Exception:
             pass
+    # Databricks notebooks: tentar dbutils.secrets
+    try:
+        import builtins  # type: ignore
+        dbutils = builtins.dbutils  # type: ignore[attr-defined]
+        # Formato esperado: SECRET_SCOPE__KEY (ex.: DATABRICKS__TOKEN)
+        # Se existir um escopo padrão em DATABRICKS_SECRET_SCOPE, utiliza-o.
+        scope = os.getenv("DATABRICKS_SECRET_SCOPE")
+        if scope:
+            secret_val = dbutils.secrets.get(scope=scope, key=key)  # type: ignore
+            if secret_val:
+                return str(secret_val)
+    except Exception:
+        pass
     return os.getenv(key, default)
 
 
