@@ -16,9 +16,10 @@ def _connect(cfg: Optional[DatabricksConfig] = None):
     from databricks import sql  # lazy import
 
     return sql.connect(
-        server_hostname=cfg.host,
-        http_path=cfg.http_path,
-        access_token=cfg.token,
+        server_hostname=str(cfg.host),
+        http_path=str(cfg.http_path),
+        access_token=str(cfg.token),
+        _user_agent_entry="lending-ops-dashboard/1.0",
     )
 
 
@@ -38,6 +39,9 @@ def run_query(sql_text: str, params: Optional[Dict[str, Any]] = None, cfg: Optio
 
     with contextlib.closing(_connect(cfg)) as conn:
         with contextlib.closing(conn.cursor()) as cur:
+            # Disallow multiple statements and enforce simple queries
+            if ";" in formatted_sql.strip().rstrip(";"):
+                raise ValueError("SQL com múltiplos statements não é permitido.")
             cur.execute(formatted_sql)
             rows = cur.fetchall()
             cols = [c[0] for c in cur.description]

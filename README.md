@@ -34,6 +34,10 @@ TABLE_TICKETS = "analytics.lending.tickets"
 TABLE_JOBS = "analytics.lending.jobs"
 TABLE_PRODUCT_METRICS = "analytics.lending.product_metrics"
 TABLE_ELIGIBILITY = "analytics.lending.eligibility"
+
+# Gate de autenticação (opcional)
+AUTH_ENABLED = true
+AUTH_PASSWORD = "defina-uma-senha-forte"
 ```
 
 Alternativamente, exporte como variáveis de ambiente (útil para CI/CD):
@@ -76,6 +80,12 @@ lending-ops-dashboard/
 
 ### Notas de modelagem preditiva
 - As funções de previsão e classificação/regressão são stubs prontos para troca para modelos mais sofisticados (ARIMA/Prophet/XGBoost/AutoML do Databricks). Mantivemos dependências leves e fallback para rodar sem Databricks.
+
+### Segurança e veracidade de dados
+- Gate de acesso via senha (`AUTH_ENABLED`, `AUTH_PASSWORD`) usando `st.secrets`.
+- Conector Databricks reforçado e mascaramento de credenciais no app.
+- Validação de schema com Pandera (`src/schemas.py`) e checagens de consistência (`src/validation.py`).
+- Dependências pinadas em `requirements.txt` e dev checks disponíveis em `dev-requirements.txt`.
 
 ### Compartilhar no GitHub
 Com Git instalado e opcionalmente GitHub CLI (`gh`):
