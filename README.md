@@ -87,6 +87,9 @@ git commit -m "chore: scaffold Lending Ops dashboard (Streamlit + Databricks)"
 # gh repo create lending-ops-dashboard --public --source . --remote origin --push
 ```
 
+### Deploy no Databricks (Apps)
+- Siga `DEPLOY_DATBRICKS.md` para publicar como Lakehouse/Streamlit App com SSO e acesso direto ao warehouse.
+
 ### Licença
 MIT
 
